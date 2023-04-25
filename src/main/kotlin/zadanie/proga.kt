@@ -60,8 +60,6 @@ class Tail : Runnable {
     @Argument(required = true, metaVar = "Input file name")
     lateinit var filePaths: MutableList<String>
     override fun run() {
-        println("countOfStrings - $countOfStrings ; countOfSymbols - $countOfSymbols ; outFileName - $outFileN ; Args - $filePaths")
-
         val isFile = isFile(filePaths)
         if (isFile) filePaths.removeFirst() else filePaths = mutableListOf(readln())
 

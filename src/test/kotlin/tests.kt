@@ -81,7 +81,6 @@ class Tests {
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans3)
         File("output.txt").delete()
-        println("third test complete")
 
 //////////////////////////////////////////FOURTH////////////////////////////////////////////////
         args =
