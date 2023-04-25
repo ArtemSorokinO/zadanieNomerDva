@@ -79,7 +79,7 @@ fun isFile(args: List<String>): Boolean = args.first() == "fileN"
 
 
 fun main(args: String) {
-    println("do")
+    println("do ")
     println(args)
     val tail = Tail()
     CmdLineParser(tail).parseArgument(args)
