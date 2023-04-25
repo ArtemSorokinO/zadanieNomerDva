@@ -24,7 +24,7 @@ class Tests {
                     "Запомните волчья ягода не из волков.\n" + //10
                     "Громко — это как тихо, только громче.\n" +
                     "У батареек есть один минус, и один плюc.\n" +
-                    "АУФ" //13
+                    "EOF" //13
         )
         createFile(
             "file2.txt",
@@ -44,7 +44,7 @@ class Tests {
 
         var args =
             "-c 2 -o output.txt fileN file1.txt".split(" ")
-        val ans1 = "УФ"
+        val ans1 = "OF"
 
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans1)
@@ -58,7 +58,7 @@ class Tests {
 
         val ans2 = "Name: file1.txt\n" +
                 "У батареек есть один минус, и один плюc.\n" +
-                "АУФ\n" +
+                "EOF\n" +
                 "Name: file2.txt\n" +
                 "Сначала потом, затем, снова опять.\n" +
                 "Время не просто — оно просто время."
@@ -74,7 +74,7 @@ class Tests {
 
         val ans3 = "Name: file1.txt\n" +
                 "юc.\n" +
-                "АУФ\n" +
+                "EOF\n" +
                 "Name: file2.txt\n" +
                 "время."
 
@@ -87,7 +87,7 @@ class Tests {
             ("-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
 
         val ans4 = "У батареек есть один минус, и один плюc.\n" +
-                "АУФ"
+                "EOF"
 
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans4)
@@ -110,7 +110,7 @@ class Tests {
                 "Запомните волчья ягода не из волков.\n" +
                 "Громко — это как тихо, только громче.\n" +
                 "У батареек есть один минус, и один плюc.\n" +
-                "АУФ"
+                "EOF"
 
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans5)
