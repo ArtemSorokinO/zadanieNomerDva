@@ -60,8 +60,8 @@ class Tail : Runnable {
     @Argument(required = true, metaVar = "Input file name")
     lateinit var filePaths: MutableList<String>
     override fun run() {
-        //println("running")
         println("countOfStrings - $countOfStrings ; countOfSymbols - $countOfSymbols ; outFileName - $outFileN ; Args - $filePaths")
+
         val isFile = isFile(filePaths)
         if (isFile) filePaths.removeFirst() else filePaths = mutableListOf(readln())
 
@@ -100,7 +100,6 @@ fun symbols(count: Int, outFileN: String?, files: List<String>, isFile: Boolean)
             var file = File(i).bufferedReader().readText().reversed()
             timedTail = ""
             timedCount = count
-            println(file)
             while (file.isNotEmpty()) {
                 if (file.first() == '\n') {
                     timedCount++
@@ -121,11 +120,9 @@ fun symbols(count: Int, outFileN: String?, files: List<String>, isFile: Boolean)
         tail = notFile.takeLast(count)
     }
     if (outFileN != null) {
-        //println("was file\n${tail.trimStart()}")
         File("$outFileN").delete()
         createFile(outFileN, tail.trimStart())
     } else {
-        //println("wasnt file")
         println(tail)
     }
 }
@@ -159,7 +156,6 @@ fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     }
 
     if (outFileN != null) {
-        //println("was file\n${tail.trimStart()}")
         File("$outFileN").delete()
         createFile(outFileN, tail.trimStart())
     } else {

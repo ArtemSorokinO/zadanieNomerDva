@@ -1,10 +1,10 @@
-
 import org.junit.jupiter.api.Test
 import zadanie.Tail
 import zadanie.main
 import java.io.File
 import kotlin.test.assertEquals
 import zadanie.createFile
+import kotlin.test.assertFails
 
 class Tests {
     @Test
@@ -39,7 +39,7 @@ class Tests {
                     "В этой жизни ты либо волк, либо НЕ волк.\n" +
                     "Будь сильным, но не сильно будь." //3
         )
-//////////////////////////////////////////FIRST//////////////////////////////////////
+//////////////////////////////////////////FIRST////////////////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
 
         var args =
@@ -51,7 +51,7 @@ class Tests {
         File("output.txt").delete()
 
         //println("first test complete")
-//////////////////////////////////////////SECOND///////////////////////////////////////
+//////////////////////////////////////////SECOND////////////////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
         args =
             ("-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt").split(" ")
@@ -67,7 +67,7 @@ class Tests {
         assertEquals(File("output.txt").bufferedReader().readText(), ans2)
         File("output.txt").delete()
         //println("second test complete")
-/////////////////////////////////////////////THIRD///////////////////////////////////////
+/////////////////////////////////////////////THIRD//////////////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
         args =
             ("-c " + "6 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt").split(" ")
@@ -83,7 +83,7 @@ class Tests {
         File("output.txt").delete()
         println("third test complete")
 
-/////////////////////////////////FOURTH/////////////////////////////////////
+//////////////////////////////////////////FOURTH////////////////////////////////////////////////
         args =
             ("-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
 
@@ -93,7 +93,40 @@ class Tests {
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans4)
         File("output.txt").delete()
-///////////////////////////////////////////END//////////////////////////////////////////
+//////////////////////////////////PRINTLN TEST///////////////////////////////////////////////////
+        args =
+            ("-n " + "4 " + "fileN " + "file1.txt").split(" ")
+        main(args)
+        File("output.txt").delete()
+//////////////////////////////////DEFAULT VALUE TEST/////////////////////////////////////////////
+        args =
+            ("-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
+
+        val ans5 = "Делай как надо, как не надо не делай.\n" +
+                "Если волк молчит, то лучше его не перебивай.\n" +
+                "Работа не волк, работа это ворк, а волк — это ходить.\n" +
+                "Легко вставать, когда ты не ложился.\n" +
+                "Иногда жизнь — это жизнь, а ты в ней иногда.\n" +
+                "Запомните. А то забудете.\n" +
+                "Запомните волчья ягода не из волков.\n" +
+                "Громко — это как тихо, только громче.\n" +
+                "У батареек есть один минус, и один плюc.\n" +
+                "АУФ"
+
+        main(args)
+        assertEquals(File("output.txt").bufferedReader().readText(), ans5)
+        File("output.txt").delete()
+///////////////////////////////////////////END OF GOOD TESTS//////////////////////////////////////////
+
+        args =
+            ("-n " + "4003 " + "-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
+        assertFails { main(args) }
+        args =
+            ("-c " + "4003 " + "-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
+        assertFails { main(args) }
+
+
+//////////////////////////////////////////END OF ALL//////////////////////////////////////////
         clear()
     }
 
