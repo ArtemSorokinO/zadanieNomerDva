@@ -50,31 +50,27 @@ Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
  */
 
 class Tail : Runnable {
-    @Argument(required = true, metaVar = "Input file name")
-    lateinit var filePaths: MutableList<String>
-    //файлы преобразуются в массив названий файлов, обработка циклом
-    //если нет fileN, то это просто строка, которую надо обработать
-
-    @Option(name = "-o", metaVar = "output file name")
-    var outFileN: String? = null
-    //если есть, то createFile
-    //если нет, то println
-
     @Option(name = "-c", metaVar = "count of last symbols", forbids = ["-n"])
     var countOfSymbols: Int? = null
 
     @Option(name = "-n", metaVar = "count of last strings (default 10)", forbids = ["-c"])
     var countOfStrings: Int? = null
 
+    @Option(name = "-o", metaVar = "output file name")
+    var outFileN: String? = null
+
+    @Argument(required = true, metaVar = "Input file name")
+    lateinit var filePaths: MutableList<String>
     override fun run() {
+        //println("running")
         val isFile = isFile(filePaths)
-        if (isFile) filePaths.removeFirst()
+        if (isFile) filePaths.removeFirst() else filePaths = mutableListOf(readln())
 
         if (countOfSymbols != null) {
-            symbols(countOfSymbols!!, outFileN, filePaths)
+            symbols(countOfSymbols!!, outFileN, filePaths, isFile)
         } else {
             if (countOfStrings == null) countOfStrings = 10
-            strings(countOfStrings!!, outFileN)
+            lines(countOfStrings!!, outFileN, filePaths, isFile)
         }
     }
 }
@@ -83,38 +79,72 @@ fun isFile(args: List<String>): Boolean = args.first() == "fileN"
 
 
 fun main(args: String) {
-    CmdLineParser(Tail()).parseArgument(args)
+    println("do")
+    println(args)
+    val tail = Tail()
+    CmdLineParser(tail).parseArgument(args)
+    println(tail.countOfStrings)
+    println("posle")
 }
 
-fun symbols(count: Int, outFileN: String?, files: List<String>) {
+fun symbols(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     var tail = ""
 
-    for (i in files) {
-        var lst = 0
-        var i = i
-        tail += i
-        while (lst != count) {
-            tail += i.last()
-            i.removeRange(i.lastIndex - 1, i.lastIndex)
-            lst++
+    if (isFile) {
+        for (i in files) {
+            var file = File(i).toString().reversed()
+            while (file.isNotEmpty()) {
+                tail = file.first() + tail
+                file = file.drop(1)
+                if (tail.length == count) break
+            }
+            if (tail.length < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+            if( files.size > 1) tail = "\nName: $i\n$tail"
         }
-    }
-
-
-    if (outFileN != null) {
-        createFile(outFileN, tail)
     } else {
+        val notFile = files.joinToString(separator = " ")
+        tail = notFile.takeLast(count)
+    }
+    if (outFileN != null) {
+        println("was file\n${tail.trimStart()}")
+        createFile(outFileN, tail.trimStart())
+    } else {
+        println("wasnt file")
         println(tail)
     }
 }
 
-fun strings(count: Int, outFileN: String?) {
+fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     var tail = ""
 
-
+    if (isFile) {
+        for (i in files) {
+            var file = File(i).toString().reversed()
+            var l = 0
+            while (file.isNotEmpty()) {
+                tail = file.first() + tail
+                file = file.drop(1)
+                if (file.first() == '\n') l++
+                if (l == count) break
+            }
+            if (l < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+            if( files.size > 1) tail = "\nName: $i\n$tail"
+        }
+    } else {
+        var notFile = files.joinToString(separator = " ")
+        var l = 0
+        while (notFile.isNotEmpty()) {
+            tail = notFile.first() + tail
+            notFile = notFile.drop(1)
+            if (notFile.first() == '\n') l++
+            if (l == count) break
+        }
+        if (l < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+    }
 
     if (outFileN != null) {
-        createFile(outFileN, tail)
+        println("was file\n${tail.trimStart()}")
+        createFile(outFileN, tail.trimStart())
     } else {
         println(tail)
     }
