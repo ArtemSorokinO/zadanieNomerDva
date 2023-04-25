@@ -1,5 +1,6 @@
 
 import org.junit.jupiter.api.Test
+import zadanie.Tail
 import zadanie.main
 import java.io.File
 import kotlin.test.assertEquals
@@ -40,45 +41,57 @@ class Tests {
         )
 //////////////////////////////////////////FIRST//////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
+
         var args =
-            "-c " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt"
+            "-c 2 -o output.txt fileN file1.txt".split(" ")
         val ans1 = "УФ"
+
         main(args)
         assertEquals(File("output.txt").bufferedReader().readText(), ans1)
         File("output.txt").delete()
 
+        //println("first test complete")
 //////////////////////////////////////////SECOND///////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
         args =
-            "tail " + "-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt"
+            ("-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt").split(" ")
 
-        val ans2 = "Name:\n" +
-                "file1.txt\n" +
+        val ans2 = "Name: file1.txt\n" +
                 "У батареек есть один минус, и один плюc.\n" +
                 "АУФ\n" +
-                "Name:\n" +
-                "file2.txt\n" +
+                "Name: file2.txt\n" +
                 "Сначала потом, затем, снова опять.\n" +
                 "Время не просто — оно просто время."
 
         main(args)
-        assertEquals(File("output.txt").toString(), ans2)
+        assertEquals(File("output.txt").bufferedReader().readText(), ans2)
         File("output.txt").delete()
+        //println("second test complete")
 /////////////////////////////////////////////THIRD///////////////////////////////////////
         //Command line: tail [-c num|-n num] [-o ofile] file0 file1 file2 …
         args =
-            "tail " + "-c " + "6 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt"
+            ("-c " + "6 " + "-o " + "output.txt " + "fileN " + "file1.txt " + "file2.txt").split(" ")
 
-        val ans3 = "Name:\n" +
-                "file1.txt\n" +
+        val ans3 = "Name: file1.txt\n" +
                 "юc.\n" +
                 "АУФ\n" +
-                "Name:\n" +
-                "file2.txt\n" +
+                "Name: file2.txt\n" +
                 "время."
 
         main(args)
-        assertEquals(File("output.txt").toString(), ans3)
+        assertEquals(File("output.txt").bufferedReader().readText(), ans3)
+        File("output.txt").delete()
+        println("third test complete")
+
+/////////////////////////////////FOURTH/////////////////////////////////////
+        args =
+            ("-n " + "2 " + "-o " + "output.txt " + "fileN " + "file1.txt").split(" ")
+
+        val ans4 = "У батареек есть один минус, и один плюc.\n" +
+                "АУФ"
+
+        main(args)
+        assertEquals(File("output.txt").bufferedReader().readText(), ans4)
         File("output.txt").delete()
 ///////////////////////////////////////////END//////////////////////////////////////////
         clear()

@@ -1,13 +1,11 @@
 package zadanie
 
 import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException
 //import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.io.File
-import java.io.FileInputStream
 
 /*
 fun readLine(inputStream: FileInputStream): String {
@@ -63,6 +61,7 @@ class Tail : Runnable {
     lateinit var filePaths: MutableList<String>
     override fun run() {
         //println("running")
+        println("countOfStrings - $countOfStrings ; countOfSymbols - $countOfSymbols ; outFileName - $outFileN ; Args - $filePaths")
         val isFile = isFile(filePaths)
         if (isFile) filePaths.removeFirst() else filePaths = mutableListOf(readln())
 
@@ -73,43 +72,60 @@ class Tail : Runnable {
             lines(countOfStrings!!, outFileN, filePaths, isFile)
         }
     }
+
+    fun parse(args: List<String>) {
+        val parser = CmdLineParser(this)
+        try {
+            parser.parseArgument(args)
+            run()
+        } catch (e: CmdLineException) {
+            null
+        }
+    }
 }
 
 fun isFile(args: List<String>): Boolean = args.first() == "fileN"
 
 
-fun main(args: String) {
-    println("do ")
-    println(args)
-    val tail = Tail()
-    CmdLineParser(tail).parseArgument(args)
-    println(tail.countOfStrings)
-    println("posle")
+fun main(args: List<String>) {
+    Tail().parse(args)
 }
 
 fun symbols(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     var tail = ""
-
+    var timedTail = ""
+    var timedCount = count
     if (isFile) {
-        for (i in files) {
-            var file = File(i).toString().reversed()
+        for (i in files.reversed()) {
+            var file = File(i).bufferedReader().readText().reversed()
+            timedTail = ""
+            timedCount = count
+            println(file)
             while (file.isNotEmpty()) {
-                tail = file.first() + tail
+                if (file.first() == '\n') {
+                    timedCount++
+                }
+                timedTail = file.first() + timedTail
                 file = file.drop(1)
-                if (tail.length == count) break
+                if (timedTail.length >= timedCount) break
             }
-            if (tail.length < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
-            if( files.size > 1) tail = "\nName: $i\n$tail"
+
+
+            if (timedTail.length < timedCount) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+            if (files.size > 1) {
+                tail = "\nName: $i\n$timedTail$tail"
+            } else tail = timedTail
         }
     } else {
         val notFile = files.joinToString(separator = " ")
         tail = notFile.takeLast(count)
     }
     if (outFileN != null) {
-        println("was file\n${tail.trimStart()}")
+        //println("was file\n${tail.trimStart()}")
+        File("$outFileN").delete()
         createFile(outFileN, tail.trimStart())
     } else {
-        println("wasnt file")
+        //println("wasnt file")
         println(tail)
     }
 }
@@ -118,8 +134,8 @@ fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     var tail = ""
 
     if (isFile) {
-        for (i in files) {
-            var file = File(i).toString().reversed()
+        for (i in files.reversed()) {
+            var file = File(i).bufferedReader().readText().reversed()
             var l = 0
             while (file.isNotEmpty()) {
                 tail = file.first() + tail
@@ -128,7 +144,7 @@ fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
                 if (l == count) break
             }
             if (l < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
-            if( files.size > 1) tail = "\nName: $i\n$tail"
+            if (files.size > 1) tail = "\nName: $i\n$tail"
         }
     } else {
         var notFile = files.joinToString(separator = " ")
@@ -143,7 +159,8 @@ fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
     }
 
     if (outFileN != null) {
-        println("was file\n${tail.trimStart()}")
+        //println("was file\n${tail.trimStart()}")
+        File("$outFileN").delete()
         createFile(outFileN, tail.trimStart())
     } else {
         println(tail)

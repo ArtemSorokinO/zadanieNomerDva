@@ -223,7 +223,8 @@
       <workItem from="1682254334313" duration="24000" />
       <workItem from="1682334300925" duration="4358000" />
       <workItem from="1682353317569" duration="11082000" />
-      <workItem from="1682402794010" duration="4158000" />
+      <workItem from="1682402794010" duration="7752000" />
+      <workItem from="1682433336370" duration="8759000" />
     </task>
     <task id="LOCAL-00001" summary="-0">
       <created>1681913084153</created>
@@ -232,7 +233,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681913084153</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="-0">
+      <created>1682407830548</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682407830548</updated>
+    </task>
+    <task id="LOCAL-00003" summary="-0">
+      <created>1682407918326</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1682407918326</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,16 +267,5 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="-0" />
     <option name="LAST_COMMIT_MESSAGE" value="-0" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/zadanie/proga.kt</url>
-          <line>65</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
