@@ -6,18 +6,7 @@ import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import java.io.File
-
-/*
-fun readLine(inputStream: FileInputStream): String {
-    var c = inputStream.read().toChar()
-    var string = ""
-    while (c != '\n') {
-        string += c
-        c = inputStream.read().toChar()
-    }
-    return string
-}
-*/
+import java.util.logging.Logger.global
 
 fun createFile(name: String, content: String): File {
     val file = File(name)
@@ -58,18 +47,7 @@ class Tail : Runnable {
     var outFileN: String? = null
 
     @Argument(required = true, metaVar = "Input file name")
-    lateinit var filePaths: MutableList<String>
-    override fun run() {
-        val isFile = isFile(filePaths)
-        if (isFile) filePaths.removeFirst() else filePaths = mutableListOf(readln())
-
-        if (countOfSymbols != null) {
-            symbols(countOfSymbols!!, outFileN, filePaths, isFile)
-        } else {
-            if (countOfStrings == null) countOfStrings = 10
-            lines(countOfStrings!!, outFileN, filePaths, isFile)
-        }
-    }
+    lateinit var files: MutableList<String>
 
     fun parse(args: List<String>) {
         val parser = CmdLineParser(this)
@@ -80,86 +58,103 @@ class Tail : Runnable {
             null
         }
     }
-}
 
-fun isFile(args: List<String>): Boolean = args.first() == "fileN"
+    private fun symbols(isFile: Boolean) {
+        countOfSymbols = countOfSymbols!!.toInt()
+        var tail = ""
+        var timedTail = ""
+        var timedCount = countOfSymbols!!
+        if (isFile) {
+            for (i in files.reversed()) {
+                var file = File(i).bufferedReader().readText().reversed()
+                timedTail = ""
+                timedCount = countOfSymbols!!
+                while (file.isNotEmpty()) {
+                    if (file.first() == '\n') {
+                        timedCount++
+                    }
+                    timedTail = file.first() + timedTail
+                    file = file.drop(1)
+                    if (timedTail.length >= timedCount) break
+                }
+
+
+                if (timedTail.length < timedCount) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+                if (files.size > 1) {
+                    tail = "\nName: $i\n$timedTail$tail"
+                } else tail = timedTail
+            }
+        } else {
+            val notFile = files.joinToString(separator = " ")
+            tail = notFile.takeLast(countOfSymbols!!)
+        }
+        if (outFileN != null) {
+            File("$outFileN").delete()
+            createFile(outFileN!!, tail.trimStart())
+        } else {
+            println(tail)
+        }
+    }
+
+    private fun lines(isFile: Boolean) {
+        var tail = ""
+        countOfStrings = countOfStrings!!.toInt()
+        if (isFile) {
+            for (i in files.reversed()) {
+                var file = File(i).bufferedReader().readText().reversed()
+                var l = 0
+                while (file.isNotEmpty()) {
+                    tail = file.first() + tail
+                    file = file.drop(1)
+                    if (file.first() == '\n') l++
+                    if (l == countOfStrings) break
+                }
+                if (l < countOfStrings!!) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+                if (files.size > 1) tail = "\nName: $i\n$tail"
+            }
+        } else {
+            var notFile = files.joinToString(separator = " ")
+            var l = 0
+            while (notFile.isNotEmpty()) {
+                tail = notFile.first() + tail
+                notFile = notFile.drop(1)
+                if (notFile.first() == '\n') l++
+                if (l == countOfStrings) break
+            }
+            if (l < countOfStrings!!) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
+        }
+
+        if (outFileN != null) {
+            File("$outFileN").delete()
+            createFile(outFileN!!, tail.trimStart())
+        } else {
+            println(tail)
+        }
+    }
+
+    private fun isFile(args: List<String>): Boolean = args.first() == "fileN"
+
+    override fun run() {
+        val isFile = isFile(files)
+        if (isFile) files.removeFirst() else files = mutableListOf(readln())
+
+        if (countOfSymbols != null) {
+            symbols(isFile)
+        } else {
+            if (countOfStrings == null) countOfStrings = 10
+            lines(isFile)
+        }
+    }
+}
 
 
 fun main(args: List<String>) {
     Tail().parse(args)
 }
 
-fun symbols(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
-    var tail = ""
-    var timedTail = ""
-    var timedCount = count
-    if (isFile) {
-        for (i in files.reversed()) {
-            var file = File(i).bufferedReader().readText().reversed()
-            timedTail = ""
-            timedCount = count
-            while (file.isNotEmpty()) {
-                if (file.first() == '\n') {
-                    timedCount++
-                }
-                timedTail = file.first() + timedTail
-                file = file.drop(1)
-                if (timedTail.length >= timedCount) break
-            }
 
 
-            if (timedTail.length < timedCount) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
-            if (files.size > 1) {
-                tail = "\nName: $i\n$timedTail$tail"
-            } else tail = timedTail
-        }
-    } else {
-        val notFile = files.joinToString(separator = " ")
-        tail = notFile.takeLast(count)
-    }
-    if (outFileN != null) {
-        File("$outFileN").delete()
-        createFile(outFileN, tail.trimStart())
-    } else {
-        println(tail)
-    }
-}
 
-fun lines(count: Int, outFileN: String?, files: List<String>, isFile: Boolean) {
-    var tail = ""
-
-    if (isFile) {
-        for (i in files.reversed()) {
-            var file = File(i).bufferedReader().readText().reversed()
-            var l = 0
-            while (file.isNotEmpty()) {
-                tail = file.first() + tail
-                file = file.drop(1)
-                if (file.first() == '\n') l++
-                if (l == count) break
-            }
-            if (l < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
-            if (files.size > 1) tail = "\nName: $i\n$tail"
-        }
-    } else {
-        var notFile = files.joinToString(separator = " ")
-        var l = 0
-        while (notFile.isNotEmpty()) {
-            tail = notFile.first() + tail
-            notFile = notFile.drop(1)
-            if (notFile.first() == '\n') l++
-            if (l == count) break
-        }
-        if (l < count) throw IllegalArgumentException("размер файла меньше, чем вы того хотите")
-    }
-
-    if (outFileN != null) {
-        File("$outFileN").delete()
-        createFile(outFileN, tail.trimStart())
-    } else {
-        println(tail)
-    }
-}
 
 
 

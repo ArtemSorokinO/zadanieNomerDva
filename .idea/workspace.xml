@@ -7,7 +7,6 @@
     <list default="true" id="fda9a6e5-9d02-41b9-9b37-2b74bfd3f8c7" name="Changes" comment="-0">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/zadanie/proga.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/zadanie/proga.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/tests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/tests.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,8 +46,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -224,7 +223,9 @@
       <workItem from="1682334300925" duration="4358000" />
       <workItem from="1682353317569" duration="11082000" />
       <workItem from="1682402794010" duration="7752000" />
-      <workItem from="1682433336370" duration="9804000" />
+      <workItem from="1682433336370" duration="10945000" />
+      <workItem from="1682674853446" duration="1528000" />
+      <workItem from="1682697699532" duration="2240000" />
     </task>
     <task id="LOCAL-00001" summary="-0">
       <created>1681913084153</created>
@@ -254,7 +255,28 @@
       <option name="project" value="LOCAL" />
       <updated>1682450123303</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="-0">
+      <created>1682451154119</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1682451154119</updated>
+    </task>
+    <task id="LOCAL-00006" summary="-0">
+      <created>1682451230952</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1682451230952</updated>
+    </task>
+    <task id="LOCAL-00007" summary="-0">
+      <created>1682451359298</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1682451359298</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
